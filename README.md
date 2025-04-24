@@ -1,1 +1,0 @@
-# nexoratlx-landing-page
