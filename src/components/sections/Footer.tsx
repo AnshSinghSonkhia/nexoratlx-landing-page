@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { motion } from "motion/react"
 import ElasticLine from "@/fancy/components/physics/elastic-line"
+import Image from "next/image";
  
 
 
@@ -189,9 +190,11 @@ const FooterBlock = () => {
             <div className="w-full lg:w-96 space-y-6">
               <Link href="#">
                 <div className="flex items-center gap-2">
-                  <img
+                  <Image
                     src="/bglessLogo.png"
                     alt="Nexora TLX Logo"
+                    width={40}
+                    height={40}
                     className="h-10 object-contain"
                   />
                   <h1 className="text-base font-bold md:text-2xl text-white">Nexora TLX</h1>
@@ -227,6 +230,7 @@ const FooterBlock = () => {
             <p className="text-gray-400">© 2025 Nexora TLX Ltd. | Copyrights and all rights reserved</p>
           </div>
         </div>
+        
       </footer>
     );
   };

@@ -1,7 +1,10 @@
 "use client";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
-import { MailIcon } from 'lucide-react' // Optional, you can use any email icon you like
+import React, { useState } from "react";
+import { toast } from "sonner";
+import { BackgroundBeams } from "../ui/background-beams";
+
+import { trackEvent } from "@/lib/mixpanel";
 
 const NewsletterSection = () => {
 
@@ -11,38 +14,46 @@ const NewsletterSection = () => {
         "ansh@youremail.com",
         "kanika@youremail.com",
       ];
+
+    const [emailInput, setEmailInput] = useState("");
+    const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
+    
      
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
-      };
-      const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setEmailInput(value);
+    
+        // trackEvent("Email Input Changed", {
+        //   inputValue: value,
+        //   section: "NewsletterSection",
+        // });
+    };
+
+    const isValidEmail = (email: string) => {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
+    };
+
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (!isValidEmail(emailInput)) {
+            toast.error("⚠️ Please enter a valid email address.");
+            return;
+        }
+
+        trackEvent("Newsletter Form Submitted", {
+            inputValue: emailInput,
+            placeholderUsed: placeholders[currentPlaceholderIndex],
+            section: "NewsletterSection",
+        });
+
+        // Show success toast after submitting
+        toast.success("🎉 Successfully subscribed! Check your inbox for updates.");
+
+
         console.log("submitted");
-      };
-
-//   return (
-//     <section className="bg-[#e50914] py-16 px-5 relative mx-auto my-10 flex max-w-7xl flex-col items-center justify-center">
-//       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-20">
-//         {/* Left Text Block */}
-//         <div className="md:w-1/2">
-//           <h2 className="text-white text-3xl md:text-4xl font-semibold leading-snug md:text-left text-center">
-//             Join the largest <br /> STEAM Education Revolution
-//           </h2>
-//         </div>
-
-//         {/* Right Email Input Block */}
-
-//     <div className="flex-1">
-//         <PlaceholdersAndVanishInput
-//         placeholders={placeholders}
-//         onChange={handleChange}
-//         onSubmit={onSubmit}
-//         />
-//     </div>
-
-//       </div>
-//     </section>
-//   );
+    };
 
 return (
     <section className="bg-[#e50914] py-16 px-5 relative mx-auto my-10 flex max-w-7xl flex-col items-center justify-center">
@@ -65,8 +76,14 @@ return (
         </div>
   
       </div>
+      <BackgroundBeams />
+      <BackgroundBeams />
+      <BackgroundBeams />
+      <BackgroundBeams />
+      <BackgroundBeams />
+      <BackgroundBeams />
     </section>
-  );
+);
   
 };
 
