@@ -1,16 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
+import Link from 'next/link';
+import { trackEvent, initMixpanel } from "@/lib/mixpanel";
 import { motion } from "motion/react";
 import AvatarGroup from '@/components/AvatarGroup';
 import React from "react";
 import { Spotlight } from "@/components/ui/spotlight-new";
+import Image from "next/image";
 // import { BackgroundLines } from "@/components/ui/background-lines";
 // import { HoverBorderGradient } from "../ui/hover-border-gradient";
 // import { ButtonMoving } from "../ui/moving-border";
 
 export function HeroSectionOne() {
   return (
-    <div className="relative mx-auto my-10 flex max-w-7xl flex-col items-center justify-center">
+    <section className="relative mx-auto my-10 flex max-w-7xl flex-col items-center justify-center">
       <Navbar />
       <Spotlight />
       <div className="px-4 py-10 md:py-20">
@@ -48,10 +52,36 @@ export function HeroSectionOne() {
           transition={{ duration: 0.3, delay: 1 }}
           className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
         >
-          <button className="w-60 transform rounded-lg bg-[#0A0A0A] px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-[#0A0A0A] dark:hover:bg-gray-200">
+          <button
+                className="w-60 transform rounded-lg bg-[#0A0A0A] px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-[#0A0A0A] dark:hover:bg-gray-200 cursor-pointer"
+                onClick={() => {
+                    trackEvent("Clicked Explore Programs Btn", {
+                        section: "Hero",
+                    });
+
+                    // Scroll to Programs section
+                    const target = document.getElementById("programs");
+                    if (target) {
+                        target.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                }}
+            >
             Explore Programs
           </button>
-          <button className="w-60 transform rounded-lg bg-white px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:bg-black dark:text-white dark:hover:bg-gray-900">
+          <button
+                className="w-60 transform rounded-lg bg-white px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:bg-black dark:text-white dark:hover:bg-gray-900 cursor-pointer"
+                onClick={() => {
+                    trackEvent("Clicked Testimonials Btn", {
+                        section: "Hero",
+                    });
+
+                    // Scroll to Testimonials section
+                    const target = document.getElementById("testimonials");
+                    if (target) {
+                        target.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                }}
+            >
             Testimonials
           </button>
         </motion.div>
@@ -72,7 +102,7 @@ export function HeroSectionOne() {
 >
     
   <div className="w-full overflow-hidden rounded-md">
-    <img
+    <Image
       src="/heroimage.png"
       alt="Nexora students building robots"
       className="aspect-[16/9] h-auto w-full object-cover"
@@ -82,7 +112,7 @@ export function HeroSectionOne() {
   </div>
 </motion.div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -90,49 +120,50 @@ const Navbar = () => {
     return (
       <nav className="flex w-full items-center justify-between px-4 py-4">
         {/* Left: Logo */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 cursor-pointer">
           {/* <div className="size-7 rounded-full bg-gradient-to-br from-violet-500 to-pink-500" /> */}
-        <img
+        <Image
             src="/bglessLogo.png"
             alt="Nexora TLX Logo"
             className="h-10 object-contain"
+            width={40}
+            height={40}
+            onClick={() =>
+                trackEvent("Clicked Logo", { location: "Navbar - Hero Section" })
+              }
         />
           <h1 className="text-base font-bold md:text-2xl">Nexora TLX</h1>
         </div>
   
         {/* Middle: Navigation Links */}
         <div className="hidden gap-8 md:flex">
-          {["Courses", "Solutions", "Blog", "About"].map((item) => (
-            <a
+          {["Courses", "Programs", "Blog", "About"].map((item) => (
+            <Link
               key={item}
               href={`#${item.toLowerCase()}`}
               className="text-lg font-medium text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white"
+              onClick={() => trackEvent(`Navbar Click - ${item}`, { section: "Hero" })}
             >
               {item}
-            </a>
+            </Link>
           ))}
         </div>
   
         {/* Right: Button */}
-        <button className="w-24 transform rounded-lg bg-[#0A0A0A] px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 md:w-32 dark:bg-white dark:text-black dark:hover:bg-gray-200">
+        <button
+            className="w-24 transform rounded-lg bg-[#0A0A0A] px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 md:w-32 dark:bg-white dark:text-black dark:hover:bg-gray-200 cursor-pointer"
+            onClick={() => {
+                trackEvent("Clicked Contact Btn", { location: "Navbar - Hero Section" });
+
+                // Scroll to Programs section
+                const target = document.getElementById("contact");
+                if (target) {
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            }}
+        >
           Contact us
         </button>
-
-        {/* <ButtonMoving
-        borderRadius="0.25rem"
-        containerClassName="w-24 transform rounded-lg bg-[#0A0A0A] font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 md:w-32 dark:bg-white dark:text-black dark:hover:bg-gray-200"
-        className="py-8"
-      >
-        Contact us
-      </ButtonMoving> */}
-
-        {/* <HoverBorderGradient
-        containerClassName="w-24 transform rounded-full bg-[#0A0A0A]  font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 md:w-32 dark:bg-white dark:text-black dark:hover:bg-gray-200"
-        as="button"
-        className=""
-      >
-        <span>Contact us</span>
-      </HoverBorderGradient> */}
       </nav>
     );
   };

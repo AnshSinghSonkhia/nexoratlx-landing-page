@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 import { Sora } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
+import MixpanelProvider from "@/components/providers/MixpanelProvider";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -32,9 +34,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${sora.variable} antialiased`}
+        className={`${sora.variable} antialiased overflow-x-hidden`}
       >
+        <MixpanelProvider>
         {children}
+        <Toaster position="bottom-right" richColors />
+        </MixpanelProvider>
       </body>
     </html>
   );
